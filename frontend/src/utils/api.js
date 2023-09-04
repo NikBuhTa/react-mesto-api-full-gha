@@ -1,7 +1,6 @@
 const options = {
-    baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-59',
+    baseUrl: 'https://api.project15.nomoredomainsicu.ru',
     headers: {
-        'authorization': 'b6ae1ce5-1938-46cc-b6c2-03f1a1f5c076',
         'Content-Type': 'application/json'
     }
 }
@@ -15,6 +14,7 @@ class Api {
     _makeRequest(endpoint, method, body = undefined) {
         const config = {
             method: method,
+            credentials: 'include',
             headers: this._headers,
         }
     

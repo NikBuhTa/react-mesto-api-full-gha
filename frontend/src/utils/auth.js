@@ -1,4 +1,4 @@
-const baseUrl = 'https://auth.nomoreparties.co';
+const baseUrl = 'https://api.project15.nomoredomainsicu.ru';
 
 const makeRequest = (endpoint, method, body = undefined, token = undefined) => {
     const headers = {
@@ -9,6 +9,7 @@ const makeRequest = (endpoint, method, body = undefined, token = undefined) => {
     const config = {
         method: method,
         headers: headers,
+        credentials: 'include',
     }
 
     if (token !== undefined) {
