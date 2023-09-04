@@ -101,6 +101,7 @@ const login = async (req, res, next) => {
       );
       return res.cookie('jwt', `${token}`, {
         httpOnly: true,
+        maxAge: '1d',
       }).status(200).send({ message: 'Успешно!' }).end();
     }
   } catch (e) {

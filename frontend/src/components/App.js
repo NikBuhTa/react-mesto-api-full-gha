@@ -43,7 +43,7 @@ function App() {
 
     const [isLoadingProfile, setIsLoadingProfile] = React.useState(false);
     const [isLoadingCards, setIsLoadingCards] = React.useState(false);
-    const [isLoadingPage, setIsLoadingPage] = React.useState(true);
+    const [isLoadingPage, setIsLoadingPage] = React.useState(false);
 
     const navigate = useNavigate();
 
@@ -72,20 +72,6 @@ function App() {
                 navigate('/', {replace: true});
             })
             .catch(err => alert(err));
-    }
-
-    function tokenCheck() {
-        const jwt = localStorage.getItem('jwt');
-        if (jwt) {
-            auth.getUserEmail(jwt)
-                .then((res) =>{
-                    setCurrentUserEmail(res.data.email);
-                    setLoggedIn(true);
-                })
-                .catch(err => alert(err))
-                .finally(() => setIsLoadingPage(false))
-        }
-        setIsLoadingPage(false);
     }
 
     function Logout() {
@@ -185,9 +171,6 @@ function App() {
         isSelectedCard({});
     }
 
-    React.useEffect(() => {
-        tokenCheck();
-    }, []);
 
     React.useEffect(() => {
         if (loggedIn === true) {
