@@ -9,7 +9,6 @@ const makeRequest = (endpoint, method, body = undefined, token = undefined) => {
     const config = {
         method: method,
         headers: headers,
-        credentials: 'include',
     }
 
     if (token !== undefined) {
