@@ -1,10 +1,11 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/users');
-const { secretKey } = require('../utils/constants');
 const { NotFoundError } = require('../errors/not-found-error');
 const { BadRequestError } = require('../errors/bad-request-error');
 const { DataConflictError } = require('../errors/data-conflict-error');
+
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 const getUsers = (req, res, next) => {
   User.find()
@@ -93,7 +94,11 @@ const login = async (req, res, next) => {
   try {
     const user = await User.findUserByCredentials(email, password);
     if (user) {
-      const token = jwt.sign({ _id: user._id }, secretKey, { expiresIn: '7d' });
+      const token = jwt.sign(
+        { _id: user._id },
+        NODE_ENV === 'production' ? JWT_SECRET : 'test-key',
+        { expiresIn: '7d' },
+      );
       return res.cookie('jwt', `${token}`, {
         httpOnly: true,
       }).status(200).send({ message: 'Успешно!' }).end();

@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
-const { secretKey } = require('../utils/constants');
 const InvalidDataError = require('../errors/invalid-data-error');
+
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 // eslint-disable-next-line consistent-return
 module.exports = (req, res, next) => {
@@ -12,7 +13,7 @@ module.exports = (req, res, next) => {
   }
 
   try {
-    payload = jwt.verify(token, secretKey);
+    payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'test-key');
   } catch (e) {
     next(new InvalidDataError('Неверный токен'));
   }
