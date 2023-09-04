@@ -19,7 +19,8 @@ const app = express();
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
 
 app.use(cors({
-  origin: false,
+  origin: '*',
+  credentials: true,
 }));
 app.use(cookieParser());
 app.use(express.json());
