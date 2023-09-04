@@ -103,6 +103,7 @@ const login = async (req, res, next) => {
         httpOnly: true,
         maxAge: 360000,
         sameSite: 'None',
+        secure: true,
       }).status(200).send({ message: 'Успешно!' }).end();
     }
   } catch (e) {
