@@ -43,7 +43,7 @@ function App() {
 
     const [isLoadingProfile, setIsLoadingProfile] = React.useState(false);
     const [isLoadingCards, setIsLoadingCards] = React.useState(false);
-    const [isLoadingPage, setIsLoadingPage] = React.useState(false);
+    const [isLoadingPage, setIsLoadingPage] = React.useState(true);
 
     const navigate = useNavigate();
 
@@ -68,10 +68,25 @@ function App() {
     function handleLogin(data) {
         auth.login(data.email, data.password)
             .then((res) => {
+                localStorage.setItem('jwt', res.token);
                 setLoggedIn(true);
                 navigate('/', {replace: true});
             })
             .catch(err => alert(err));
+    }
+
+    function tokenCheck() {
+        const jwt = localStorage.getItem('jwt');
+        if (jwt) {
+            auth.getUserEmail(jwt)
+                .then((res) =>{
+                    setCurrentUserEmail(res.data.email);
+                    setLoggedIn(true);
+                })
+                .catch(err => alert(err))
+                .finally(() => setIsLoadingPage(false))
+        }
+        setIsLoadingPage(false);
     }
 
     function Logout() {
@@ -85,7 +100,7 @@ function App() {
         (!isLiked
         ? api.likeCard(card._id)
         : api.dislikeCard(card._id))
-            .then(res => {setCards((state) => state.map((c) => c._id === card._id ? res : c))})
+            .then(res => {setCards((state) => state.map((c) => c._id === card._id ? res.data : c))})
             .catch(res => alert(res));
     }
 
@@ -115,7 +130,7 @@ function App() {
         setIsEditAvatarPopupLoading(true);
         api.updateAvatar(link)
             .then(res => {
-                setCurrentUser(res);
+                setCurrentUser(res.data);
                 closeAllPopups();
             })
             .catch(err =>alert(err))
@@ -130,7 +145,7 @@ function App() {
         setIsEditProfilePopupLoading(true);
         api.updateUserInfo(info)
             .then(res => {
-                setCurrentUser(res);
+                setCurrentUser(res.data);
                 closeAllPopups();
             })
             .catch(err => alert(err))
@@ -147,7 +162,7 @@ function App() {
         setIsAddPlacePopupLoading(true);
         api.addCard({name, link})
             .then(res => {
-                setCards([res, ...cards]);
+                setCards([res.data, ...cards]);
                 closeAllPopups();
             })
             .catch(err => alert(err))
@@ -171,18 +186,21 @@ function App() {
         isSelectedCard({});
     }
 
+    React.useEffect(() => {
+        tokenCheck();
+    }, []);
 
     React.useEffect(() => {
         if (loggedIn === true) {
             setIsLoadingProfile(true);
         setIsLoadingCards(true);
         api.getUserInfo()
-            .then(res => setCurrentUser(res))
+            .then(res => setCurrentUser(res.data))
             .catch(err => alert(err))
             .finally(() => setIsLoadingProfile(false))
         api.getCards()
             .then((res) => {
-                setCards(res);
+                setCards(res.data);
             })
             .catch(err => alert(err))
             .finally(() => {

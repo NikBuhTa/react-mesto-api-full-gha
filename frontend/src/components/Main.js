@@ -12,7 +12,6 @@ function Main({onEditProfile, onEditAvatar, onAddPlace, onCardClick, cards, onCa
     }
 
     const currentUser = React.useContext(CurrentUserContext);
-
     return(
         <main className="main">
             <section className="profile">

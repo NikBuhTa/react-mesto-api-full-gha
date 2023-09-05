@@ -9,6 +9,7 @@ const makeRequest = (endpoint, method, body = undefined, token = undefined) => {
     const config = {
         method: method,
         headers: headers,
+        credentials: 'include',
     }
 
     if (token !== undefined) {
@@ -19,9 +20,9 @@ const makeRequest = (endpoint, method, body = undefined, token = undefined) => {
         config.body = JSON.stringify(body)
     }
 
-    if (endpoint === 'signin') {
-        config['credentials'] = 'include';
-    }
+    // if (endpoint === 'signin') {
+    //     config['credentials'] = 'include';
+    // }
 
     return fetch(`${baseUrl}/${endpoint}`, config)
         .then((res) => {
