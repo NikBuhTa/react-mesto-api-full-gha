@@ -19,7 +19,7 @@ const app = express();
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'https://project15.nomoredomainsicu.ru',
   credentials: true,
 }));
 app.use(cookieParser());
